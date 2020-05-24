@@ -3,6 +3,8 @@ package review
 import (
 	"fmt"
 	"io"
+	"strings"
+	"time"
 
 	"golang.org/x/net/html"
 )
@@ -22,32 +24,47 @@ func Parse(reader io.Reader) ([]Review, error) {
 	if err != nil {
 		return nil, err
 	}
-	dfs(doc, "")
 	// 1. Find all the .review-listing divs
+	nodes := shopifyReviewListing(doc)
+	for _, node := range nodes {
+		fmt.Println(node)
+	}
 	// 2. For each review-listing node
-	//   2.a get the date
-	//   2.b get the rating
-	//   2.c get the title
-	//   2.d get the text
 	// 3. return the Reviews
 	return nil, nil
 }
 
-func shopifyReviewListing(node *html.Node) []*html.Node {
-	if node.Type == html.ElementNode && node.Data == "div" {
-		return []*html.Node{node}
-	}
-	var ret []*html.Node
+func buildReview(node *html.Node) Review {
+	//   2.a get the date
+	//   2.b get the rating
+	//   2.c get the title
+	//   2.d get the text
+	var ret Review
 	return ret
 }
 
-func dfs(node *html.Node, padding string) {
-	msg := node.Data
-	// if node.Type == html.ElementNode {
-	// 	msg = "<" + msg + ">"
-	// }
-	fmt.Println(padding, msg)
-	for child := node.FirstChild; child != nil; child = child.NextSibling {
-		dfs(child, padding+"  ")
+func shopifyReviewListing(node *html.Node) []*html.Node {
+	if node.Type == html.ElementNode &&
+		node.Data == "div" &&
+		strings.TrimSpace(node.Attr[0].Val) == "review-listing" {
+		return []*html.Node{node}
 	}
+	var ret []*html.Node
+	for child := node.FirstChild; child != nil; child = child.NextSibling {
+		ret = append(ret, shopifyReviewListing(child)...)
+	}
+	return ret
+}
+
+func getDate(node *html.Node) time.Time {
+	var date time.Time
+	for _, attr := range node.Attr {
+		date, err := time.Parse("Jan 02, 2006", "May 22, 2020")
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(date)
+		fmt.Println(attr)
+	}
+	return date
 }

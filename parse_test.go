@@ -3,6 +3,9 @@ package review
 import (
 	"strings"
 	"testing"
+	"time"
+
+	"golang.org/x/net/html"
 )
 
 var shopifyReviewHtml = `
@@ -53,12 +56,31 @@ var shopifyReviewHtml = `
 </div>
 `
 
-func TestParse(t *testing.T) {
+func Test_parse(t *testing.T) {
 	result, error := Parse(strings.NewReader(shopifyReviewHtml))
 	if error != nil {
 		t.Errorf("Parse error")
 	}
 	if result != nil {
 		t.Errorf("Parse was incorrect, got: %v, want: %v.", result, nil)
+	}
+}
+
+func Test_getDate(t *testing.T) {
+	var HTMLNodeStr = `
+	      <div class="review-metadata__item-value">
+        May 22, 2020
+      </div>
+	`
+	HTMLNode, err := html.Parse(strings.NewReader(HTMLNodeStr))
+
+	date := time.Date(
+		2020, 05, 2, 00, 00, 00, 651387237, time.UTC)
+	if err != nil {
+		panic(err)
+	}
+	result := getDate(HTMLNode)
+	if result != date {
+		t.Errorf("Date is incorrect, got: %v, want: %v", result, date)
 	}
 }
