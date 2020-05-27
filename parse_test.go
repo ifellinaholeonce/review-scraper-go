@@ -53,6 +53,7 @@ var shopifyReviewHtml = `
 `
 
 func Test_parse(t *testing.T) {
+	shopifyReviewHtml = shopifyReviewHtml + shopifyReviewHtml
 	result, error := Parse(strings.NewReader(shopifyReviewHtml))
 	if error != nil {
 		t.Errorf("Parse error")
@@ -60,8 +61,8 @@ func Test_parse(t *testing.T) {
 	if result == nil {
 		t.Errorf("Parse was incorrect, got: %v", nil)
 	}
-	if len(result) != 1 {
-		t.Errorf("Got length %v, expected: 1", len(result))
+	if len(result) != 2 {
+		t.Errorf("Got length %v, expected: 2", len(result))
 	}
 	fmt.Println(result)
 }
