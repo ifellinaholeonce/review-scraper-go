@@ -1,6 +1,7 @@
 package review
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -48,8 +49,6 @@ var shopifyReviewHtml = `
 </button>
         <span class="review-helpfulness__helpful-flash-message" aria-live="polite"></span>
 </form></div>  </div>
-
-
 </div>
 `
 
@@ -58,9 +57,13 @@ func Test_parse(t *testing.T) {
 	if error != nil {
 		t.Errorf("Parse error")
 	}
-	if result != nil {
-		t.Errorf("Parse was incorrect, got: %v, want: %v.", result, nil)
+	if result == nil {
+		t.Errorf("Parse was incorrect, got: %v", nil)
 	}
+	if len(result) != 1 {
+		t.Errorf("Got length %v, expected: 1", len(result))
+	}
+	fmt.Println(result)
 }
 
 func Test_getDate(t *testing.T) {
