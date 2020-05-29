@@ -1,4 +1,4 @@
-package review
+package Parse
 
 import (
 	"fmt"
@@ -52,10 +52,6 @@ var shopifyReviewHtml = `
 </div>
 `
 
-// func Test_main(t *testing.T) {
-// 	main()
-// }
-
 func Test_parse(t *testing.T) {
 	shopifyReviewHtml = shopifyReviewHtml + shopifyReviewHtml
 	result, error := Parse(strings.NewReader(shopifyReviewHtml))
@@ -69,22 +65,4 @@ func Test_parse(t *testing.T) {
 		t.Errorf("Got length %v, expected: 2", len(result))
 	}
 	fmt.Println(result)
-}
-
-func Test_getDate(t *testing.T) {
-	// var HTMLNodeStr = `
-	// <div class="review-metadata__item-value">
-	// 	May 22, 2020
-	// </div>
-	// `
-
-	// date := time.Date(
-	// 	2020, 05, 2, 00, 00, 00, 651387237, time.UTC)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// result := getDate(HTMLNode)
-	// if result != date {
-	// 	t.Errorf("Date is incorrect, got: %v, want: %v", result, date)
-	// }
 }
