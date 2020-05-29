@@ -72,7 +72,7 @@ func parseReviewMetaData(element *goquery.Selection) (int, time.Time) {
 }
 
 func parseDate(dateStr string) time.Time {
-	date, err := time.Parse("Jan 02, 2006", strings.TrimSpace(dateStr))
+	date, err := time.Parse("January 2, 2006", strings.TrimSpace(dateStr))
 	if err != nil {
 		panic(err)
 	}

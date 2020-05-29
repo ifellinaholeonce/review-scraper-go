@@ -1,9 +1,16 @@
 package main
 
 import (
-	"web-scraper-go/parse"
+	"fmt"
+	"review-scraper-go/parse"
 )
 
 func main() {
-	parse.URLScrape
+	var appName string
+	fmt.Println("What is the name of the app?")
+	_, err := fmt.Scan(&appName)
+	if err != nil {
+		panic(err)
+	}
+	parse.URLScrape(appName)
 }
