@@ -52,6 +52,10 @@ var shopifyReviewHtml = `
 </div>
 `
 
+// func Test_main(t *testing.T) {
+// 	main()
+// }
+
 func Test_parse(t *testing.T) {
 	shopifyReviewHtml = shopifyReviewHtml + shopifyReviewHtml
 	result, error := Parse(strings.NewReader(shopifyReviewHtml))
