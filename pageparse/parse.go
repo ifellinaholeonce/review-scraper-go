@@ -20,7 +20,7 @@ type Review struct {
 
 // Parse will take in an HTML document and return a slice of Reviews parsed
 // from it.
-func Parse(reader io.Reader) ([]Review, error) {
+func Parse(reader io.Reader) ([]Review, bool, error) {
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		log.Fatal(err)
@@ -33,9 +33,15 @@ func Parse(reader io.Reader) ([]Review, error) {
 		reviews = append(reviews, buildReview(s))
 	})
 
-	// 3. return the Reviews
+	// If there were reviews on the page return false
+	// for the completed boolean so that we know to check
+	// the next page of reviews
+	var completed bool
+	if len(reviews) > 0 {
+		completed = false
+	}
 
-	return reviews, nil
+	return reviews, completed, nil
 }
 
 func buildReview(element *goquery.Selection) Review {

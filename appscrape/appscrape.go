@@ -22,9 +22,14 @@ func URLScrape(AppName string) {
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 	}
 
-	reviews, err := pageparse.Parse(res.Body)
+	reviews, finished, err := pageparse.Parse(res.Body)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if finished {
+		fmt.Println("No reviews on page")
+	} else {
+		fmt.Println("Still more pages")
 	}
 	fmt.Println(reviews)
 }

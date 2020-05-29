@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var shopifyReviewHtml = `
+var shopifyReviewHTML = `
 <div class="review-listing ">
   <div data-review-id="123456">
   <div class="review-listing-header">
@@ -53,8 +53,8 @@ var shopifyReviewHtml = `
 `
 
 func Test_parse(t *testing.T) {
-	shopifyReviewHtml = shopifyReviewHtml + shopifyReviewHtml
-	result, error := Parse(strings.NewReader(shopifyReviewHtml))
+	shopifyReviewHTML = shopifyReviewHTML + shopifyReviewHTML
+	result, completed, error := Parse(strings.NewReader(shopifyReviewHTML))
 	if error != nil {
 		t.Errorf("Parse error")
 	}
@@ -63,6 +63,9 @@ func Test_parse(t *testing.T) {
 	}
 	if len(result) != 2 {
 		t.Errorf("Got length %v, expected: 2", len(result))
+	}
+	if !completed {
+		t.Errorf("Expected Completed bool to be true")
 	}
 	fmt.Println(result)
 }
