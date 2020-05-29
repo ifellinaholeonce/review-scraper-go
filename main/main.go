@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"review-scraper-go/parse"
+	"review-scraper-go/appscrape"
 )
 
 func main() {
@@ -12,5 +12,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	parse.URLScrape(appName)
+	appscrape.URLScrape(appName)
 }
