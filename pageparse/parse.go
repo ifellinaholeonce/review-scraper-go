@@ -37,8 +37,8 @@ func Parse(reader io.Reader) ([]Review, bool, error) {
 	// for the completed boolean so that we know to check
 	// the next page of reviews
 	var completed bool
-	if len(reviews) > 0 {
-		completed = false
+	if len(reviews) == 0 {
+		completed = true
 	}
 
 	return reviews, completed, nil

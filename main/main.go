@@ -12,5 +12,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	appscrape.URLScrape(appName)
+	appscrape.Scrape(appName)
 }

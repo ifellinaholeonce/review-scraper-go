@@ -1,7 +1,6 @@
 package pageparse
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 )
@@ -54,7 +53,7 @@ var shopifyReviewHTML = `
 
 func Test_parse(t *testing.T) {
 	shopifyReviewHTML = shopifyReviewHTML + shopifyReviewHTML
-	result, completed, error := Parse(strings.NewReader(shopifyReviewHTML))
+	result, _, error := Parse(strings.NewReader(shopifyReviewHTML))
 	if error != nil {
 		t.Errorf("Parse error")
 	}
@@ -64,8 +63,18 @@ func Test_parse(t *testing.T) {
 	if len(result) != 2 {
 		t.Errorf("Got length %v, expected: 2", len(result))
 	}
+}
+
+// Test page handling by parse function
+func Test_parsePaging(t *testing.T) {
+	shopifyReviewHTML = shopifyReviewHTML + shopifyReviewHTML
+	_, completed, _ := Parse(strings.NewReader(shopifyReviewHTML))
+	if completed {
+		t.Errorf("Expected Completed bool to be false")
+	}
+	shopifyReviewHTML = `<div>No Reviews Here</div>`
+	_, completed, _ = Parse(strings.NewReader(shopifyReviewHTML))
 	if !completed {
 		t.Errorf("Expected Completed bool to be true")
 	}
-	fmt.Println(result)
 }
