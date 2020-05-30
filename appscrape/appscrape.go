@@ -10,8 +10,16 @@ import (
 
 // Scrape scrapes Shopify reviews for an app. Pass in the app name
 // to fit https://apps.shopify.com/{{AppName}}/reviews"
-func Scrape(appName string) {
+func Scrape(appName string, optionalMaxPage ...int) {
+	var maxPageCount int
+	if len(optionalMaxPage) > 0 {
+		maxPageCount = optionalMaxPage[0]
+	} else {
+		maxPageCount = 1
+	}
+
 	pageCount := 1
+
 	var reviews []pageparse.Review
 	finished := false
 
@@ -38,14 +46,10 @@ func Scrape(appName string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		if pageCount >= 10 {
-			fmt.Println("Breaking")
+		if pageCount == maxPageCount {
 			finished = true
-			break
 		}
-		if finished {
-			fmt.Println("No reviews on page")
-		} else {
+		if !finished {
 			fmt.Println("Fetching another page")
 			pageCount++
 		}
