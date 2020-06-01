@@ -55,5 +55,28 @@ func Scrape(appName string, optionalMaxPage ...int) {
 		}
 	}
 
-	fmt.Println(reviews)
+	var scores []int
+	for _, review := range reviews {
+		scores = append(scores, review.Rating)
+	}
+
+	avg, _, _ := avgMedMode(scores)
+	fmt.Println("The average is", avg)
+}
+
+func avgMedMode(scores []int) (int, int, int) {
+	sum := sum(scores...)
+	avg := sum / len(scores)
+
+	return avg, 0, 0
+}
+
+func sum(input ...int) int {
+	sum := 0
+
+	for i := range input {
+		sum += input[i]
+	}
+
+	return sum
 }
