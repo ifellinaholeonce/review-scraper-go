@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"review-scraper-go/calculate"
 	"review-scraper-go/pageparse"
 	"strconv"
 )
@@ -60,39 +61,6 @@ func Scrape(appName string, optionalMaxPage ...int) {
 		scores = append(scores, review.Rating)
 	}
 
-	avg := calcAvg(scores)
-	median := calcMedian(scores)
-	fmt.Println("The average is", avg)
-	fmt.Println("median", median)
-}
-
-func calcAvg(scores []int) float32 {
-	var avg float32
-	sum := sum(scores...)
-	avg = float32(sum) / float32(len(scores))
-	fmt.Println("scores sum", sum)
-	fmt.Println("count", len(scores))
-
-	return avg
-}
-
-func sum(input ...int) int {
-	sum := 0
-
-	for i := range input {
-		sum += input[i]
-	}
-
-	return sum
-}
-
-func calcMedian(scores []int) int {
-	var median int
-	middle := len(scores) / 2
-	if len(scores)%2 == 0 {
-		median = (scores[middle-1] + scores[middle]) / 2
-	} else {
-		median = scores[middle]
-	}
-	return median
+	fmt.Println("The average is", calculate.CalcAvg(scores))
+	fmt.Println("median", calculate.CalcMedian(scores))
 }
