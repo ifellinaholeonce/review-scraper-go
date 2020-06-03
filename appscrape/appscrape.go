@@ -66,9 +66,12 @@ func Scrape(appName string, optionalMaxPage ...int) {
 	fmt.Println("median", median)
 }
 
-func calcAvg(scores []int) int {
+func calcAvg(scores []int) float32 {
+	var avg float32
 	sum := sum(scores...)
-	avg := sum / len(scores)
+	avg = float32(sum) / float32(len(scores))
+	fmt.Println("scores sum", sum)
+	fmt.Println("count", len(scores))
 
 	return avg
 }
