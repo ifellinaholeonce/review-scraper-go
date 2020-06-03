@@ -60,15 +60,17 @@ func Scrape(appName string, optionalMaxPage ...int) {
 		scores = append(scores, review.Rating)
 	}
 
-	avg, _, _ := avgMedMode(scores)
+	avg := calcAvg(scores)
+	median := calcMedian(scores)
 	fmt.Println("The average is", avg)
+	fmt.Println("median", median)
 }
 
-func avgMedMode(scores []int) (int, int, int) {
+func calcAvg(scores []int) int {
 	sum := sum(scores...)
 	avg := sum / len(scores)
 
-	return avg, 0, 0
+	return avg
 }
 
 func sum(input ...int) int {
@@ -79,4 +81,15 @@ func sum(input ...int) int {
 	}
 
 	return sum
+}
+
+func calcMedian(scores []int) int {
+	var median int
+	middle := len(scores) / 2
+	if len(scores)%2 == 0 {
+		median = (scores[middle-1] + scores[middle]) / 2
+	} else {
+		median = scores[middle]
+	}
+	return median
 }
