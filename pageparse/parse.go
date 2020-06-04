@@ -1,6 +1,7 @@
 package pageparse
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"strconv"
@@ -20,7 +21,7 @@ type Review struct {
 
 // Parse will take in an HTML document and return a slice of Reviews parsed
 // from it.
-func Parse(reader io.Reader) ([]Review, bool, error) {
+func Parse(reader io.Reader) ([]Review, error) {
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
 		log.Fatal(err)
@@ -33,15 +34,10 @@ func Parse(reader io.Reader) ([]Review, bool, error) {
 		reviews = append(reviews, buildReview(s))
 	})
 
-	// If there were reviews on the page return false
-	// for the completed boolean so that we know to check
-	// the next page of reviews
-	var completed bool
-	if len(reviews) == 0 {
-		completed = true
-	}
+	fmt.Println("parse here")
+	fmt.Println(reviews)
 
-	return reviews, completed, nil
+	return reviews, nil
 }
 
 func buildReview(element *goquery.Selection) Review {
