@@ -12,16 +12,17 @@ import (
 // Scrape scrapes Shopify reviews for an app. Pass in the app name
 // to fit https://apps.shopify.com/{{AppName}}/reviews"
 func Scrape(appName string, maxPage int) {
+	MAX_CONCURRENT := 10
 	var pageCount int
 	if maxPage == 0 {
 		// Detect max page count
-		pageCount = 0
+		pageCount = calcTotalPages(appName)
 	} else {
 		pageCount = maxPage
 	}
 
 	var results []*http.Response
-	pages := make(chan int)
+	pages := make(chan int, MAX_CONCURRENT)
 	done := make(chan bool)
 
 	go func() {
@@ -29,6 +30,7 @@ func Scrape(appName string, maxPage int) {
 			page, more := <-pages
 			if more {
 				results = append(results, asyncFetch(appName, page))
+				fmt.Println("received page number", page)
 			} else {
 				done <- true
 				return
@@ -37,6 +39,7 @@ func Scrape(appName string, maxPage int) {
 	}()
 
 	for i := 1; i <= pageCount; i++ {
+		fmt.Println("queueing page number", i)
 		pages <- i
 	}
 
@@ -82,4 +85,13 @@ func fetchPage(appName string, page int) *http.Response {
 
 func asyncFetch(appName string, pageCount int) *http.Response {
 	return fetchPage(appName, pageCount)
+}
+
+func calcTotalPages(appName string) int {
+	// Grab first page
+	res := fetchPage(appName, 1)
+	// Parse the total review count
+	total := (pageparse.ParseReviewsTotalCount(res.Body) / 10) + 1
+	fmt.Println("total pages is", total)
+	return total
 }

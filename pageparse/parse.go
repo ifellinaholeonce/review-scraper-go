@@ -3,6 +3,7 @@ package pageparse
 import (
 	"io"
 	"log"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -34,6 +35,24 @@ func Parse(reader io.Reader) ([]Review, error) {
 	})
 
 	return reviews, nil
+}
+
+func ParseReviewsTotalCount(reader io.Reader) int {
+	doc, err := goquery.NewDocumentFromReader(reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var words string
+	words = doc.Find(".grid__item.gutter-bottom").Text()
+
+	re := regexp.MustCompile("[0-9]+")
+	nums := re.FindAllString(words, -1)
+	total, err := strconv.Atoi(nums[len(nums)-1])
+	if err != nil {
+		log.Fatal("Could not parse scraped text to int", err)
+	}
+	return total
 }
 
 func buildReview(element *goquery.Selection) Review {
