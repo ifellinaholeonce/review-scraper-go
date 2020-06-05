@@ -1,7 +1,6 @@
 package pageparse
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"strconv"
@@ -33,9 +32,6 @@ func Parse(reader io.Reader) ([]Review, error) {
 		// For each item found, get the band and title
 		reviews = append(reviews, buildReview(s))
 	})
-
-	fmt.Println("parse here")
-	fmt.Println(reviews)
 
 	return reviews, nil
 }
