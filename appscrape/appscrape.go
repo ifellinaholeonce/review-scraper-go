@@ -11,7 +11,7 @@ import (
 
 // Scrape scrapes Shopify reviews for an app. Pass in the app name
 // to fit https://apps.shopify.com/{{AppName}}/reviews"
-func Scrape(appName string, maxPage int) {
+func Scrape(appName string, maxPage int) []pageparse.Review {
 	MAX_CONCURRENT := 10
 	var pageCount int
 	if maxPage == 0 {
@@ -66,6 +66,7 @@ func Scrape(appName string, maxPage int) {
 
 	fmt.Println("The average is", calculate.CalcAvg(scores))
 	fmt.Println("median", calculate.CalcMedian(scores))
+	return reviews
 }
 
 func fetchPage(appName string, page int) *http.Response {
