@@ -14,7 +14,13 @@ const (
 	dbname = "review-scraper-go"
 )
 
-func main() {
+// TODO: Using global connection variable for now. Refactor this into some sort
+// of dependecy injection into the packages.
+var Conn *sql.DB
+
+// Init initializes a connection to the postgres DB and saves that connection in
+// a global variable.
+func Init() {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"dbname=%s sslmode=disable",
 		host, port, user, dbname)
@@ -23,7 +29,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer db.Close()
+
+	Conn = db
 
 	err = db.Ping()
 	if err != nil {
